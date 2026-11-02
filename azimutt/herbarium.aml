@@ -1,0 +1,29 @@
+# The Herbarium (demo-python-mysql-cellar), charted in AML, Azimutt's schema language.
+# One MySQL table, and the Cellar bucket its rows point to.
+# Use it in Azimutt as an AML source: alone, it draws the whole map without any credential;
+# next to the live MySQL source, it adds the part the database cannot declare (the Cellar link).
+# 2 entities: well within the free plan (10 tables in AML).
+
+specimens | One pressed specimen per row: the printed label, and where its image lives in Cellar.
+  id int pk | Accession number, printed as Nº 00007 on the sheet. AUTO_INCREMENT.
+  latin_name varchar(120) | Binomial name, set in italic on the label.
+  common_name varchar(120) | Typed under the Latin name.
+  family varchar(60) index=ix_specimens_family | Botanical family: the folder tabs of the cabinet.
+  locality varchar(120) | Where the plant was collected (a French region in the seed data).
+  collected_on date | Shown herbarium style on the label: 14.V.1887.
+  collector varchar(80) | Written in the collector's hand.
+  object_key varchar(200) | Key of the image in the Cellar bucket. No foreign key: MySQL cannot point outside itself.
+  content_type varchar(40) | MIME type of the image (image/svg+xml for drawn plates).
+  byte_size int | Size of the image in Cellar, in bytes.
+  drawing varchar(40) nullable | Set for a plant drawn by code (for example oak/1842), empty for a photo.
+  seed_key varchar(40) nullable unique | Set on seed rows only, so the seed is idempotent.
+  created_sql text nullable | The INSERT that created the row, as MySQL received it.
+  created_at datetime=`now()` | Set by the MySQL server clock.
+
+cellar.objects | Images in the Cellar bucket (S3-compatible object storage). Outside MySQL: Azimutt only sees it because it is written here.
+  key varchar(200) pk | Object key, for example sheets/2026/11/fagus-sylvatica-22a505.png
+  content_type varchar(40) | Content-Type stored with the object.
+  size int | Bytes.
+  etag varchar(64) | Checksum returned by Cellar.
+
+rel specimens(object_key) -- cellar.objects(key) | One image per specimen. The app writes to Cellar first, then inserts the row.

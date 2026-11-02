@@ -1,0 +1,413 @@
+{
+  "surveyedAt": "2026-11-01T22:24:30.239Z",
+  "engine": "MySQL",
+  "version": "8.4.10-10",
+  "tables": [
+    {
+      "name": "specimens",
+      "kind": "BASE TABLE",
+      "engine": "InnoDB",
+      "rows": 12,
+      "estimatedRows": 12,
+      "dataBytes": 16384,
+      "indexBytes": 32768,
+      "avgRowBytes": 1365,
+      "autoIncrement": 15,
+      "comment": null,
+      "createdAt": "2026-11-01 20:50:52",
+      "columns": [
+        {
+          "position": 1,
+          "name": "id",
+          "type": "int",
+          "dataType": "int",
+          "nullable": false,
+          "default": null,
+          "extra": "auto_increment",
+          "comment": null,
+          "stats": {
+            "distinct": 12,
+            "nulls": 0,
+            "min": 1,
+            "max": 12,
+            "common": []
+          }
+        },
+        {
+          "position": 2,
+          "name": "latin_name",
+          "type": "varchar(120)",
+          "dataType": "varchar",
+          "nullable": false,
+          "default": null,
+          "extra": null,
+          "comment": null,
+          "stats": {
+            "distinct": 12,
+            "nulls": 0,
+            "min": null,
+            "max": null,
+            "common": []
+          }
+        },
+        {
+          "position": 3,
+          "name": "common_name",
+          "type": "varchar(120)",
+          "dataType": "varchar",
+          "nullable": false,
+          "default": null,
+          "extra": null,
+          "comment": null,
+          "stats": {
+            "distinct": 12,
+            "nulls": 0,
+            "min": null,
+            "max": null,
+            "common": []
+          }
+        },
+        {
+          "position": 4,
+          "name": "family",
+          "type": "varchar(60)",
+          "dataType": "varchar",
+          "nullable": false,
+          "default": null,
+          "extra": null,
+          "comment": null,
+          "stats": {
+            "distinct": 12,
+            "nulls": 0,
+            "min": null,
+            "max": null,
+            "common": []
+          }
+        },
+        {
+          "position": 5,
+          "name": "locality",
+          "type": "varchar(120)",
+          "dataType": "varchar",
+          "nullable": false,
+          "default": null,
+          "extra": null,
+          "comment": null,
+          "stats": {
+            "distinct": 5,
+            "nulls": 0,
+            "min": null,
+            "max": null,
+            "common": [
+              {
+                "value": "Bretagne",
+                "n": 3
+              },
+              {
+                "value": "Île-de-France",
+                "n": 3
+              },
+              {
+                "value": "Normandie",
+                "n": 2
+              },
+              {
+                "value": "Pays de la Loire",
+                "n": 2
+              },
+              {
+                "value": "Provence",
+                "n": 2
+              }
+            ]
+          }
+        },
+        {
+          "position": 6,
+          "name": "collected_on",
+          "type": "date",
+          "dataType": "date",
+          "nullable": false,
+          "default": null,
+          "extra": null,
+          "comment": null,
+          "stats": {
+            "distinct": 12,
+            "nulls": 0,
+            "min": "1886-08-17",
+            "max": "1894-11-02",
+            "common": []
+          }
+        },
+        {
+          "position": 7,
+          "name": "collector",
+          "type": "varchar(80)",
+          "dataType": "varchar",
+          "nullable": false,
+          "default": null,
+          "extra": null,
+          "comment": null,
+          "stats": {
+            "distinct": 4,
+            "nulls": 0,
+            "min": null,
+            "max": null,
+            "common": [
+              {
+                "value": "Auguste Marchand",
+                "n": 3
+              },
+              {
+                "value": "Émile Varenne",
+                "n": 3
+              },
+              {
+                "value": "Hortense Brissac",
+                "n": 3
+              },
+              {
+                "value": "Léonie Garnier",
+                "n": 3
+              }
+            ]
+          }
+        },
+        {
+          "position": 8,
+          "name": "object_key",
+          "type": "varchar(200)",
+          "dataType": "varchar",
+          "nullable": false,
+          "default": null,
+          "extra": null,
+          "comment": null,
+          "stats": {
+            "distinct": 12,
+            "nulls": 0,
+            "min": null,
+            "max": null,
+            "common": []
+          }
+        },
+        {
+          "position": 9,
+          "name": "content_type",
+          "type": "varchar(40)",
+          "dataType": "varchar",
+          "nullable": false,
+          "default": null,
+          "extra": null,
+          "comment": null,
+          "stats": {
+            "distinct": 1,
+            "nulls": 0,
+            "min": null,
+            "max": null,
+            "common": [
+              {
+                "value": "image/svg+xml",
+                "n": 12
+              }
+            ]
+          }
+        },
+        {
+          "position": 10,
+          "name": "byte_size",
+          "type": "int",
+          "dataType": "int",
+          "nullable": false,
+          "default": null,
+          "extra": null,
+          "comment": null,
+          "stats": {
+            "distinct": 12,
+            "nulls": 0,
+            "min": 42226,
+            "max": 81542,
+            "common": []
+          }
+        },
+        {
+          "position": 11,
+          "name": "drawing",
+          "type": "varchar(40)",
+          "dataType": "varchar",
+          "nullable": true,
+          "default": null,
+          "extra": null,
+          "comment": null,
+          "stats": {
+            "distinct": 12,
+            "nulls": 0,
+            "min": null,
+            "max": null,
+            "common": []
+          }
+        },
+        {
+          "position": 12,
+          "name": "seed_key",
+          "type": "varchar(40)",
+          "dataType": "varchar",
+          "nullable": true,
+          "default": null,
+          "extra": null,
+          "comment": null,
+          "stats": {
+            "distinct": 12,
+            "nulls": 0,
+            "min": null,
+            "max": null,
+            "common": []
+          }
+        },
+        {
+          "position": 13,
+          "name": "created_sql",
+          "type": "text",
+          "dataType": "text",
+          "nullable": true,
+          "default": null,
+          "extra": null,
+          "comment": null,
+          "stats": {
+            "distinct": null,
+            "nulls": 0,
+            "min": null,
+            "max": null,
+            "common": []
+          }
+        },
+        {
+          "position": 14,
+          "name": "created_at",
+          "type": "datetime",
+          "dataType": "datetime",
+          "nullable": false,
+          "default": "now()",
+          "extra": "DEFAULT_GENERATED",
+          "comment": null,
+          "stats": {
+            "distinct": 4,
+            "nulls": 0,
+            "min": "2026-11-01 20:50:54",
+            "max": "2026-11-01 20:50:57",
+            "common": []
+          }
+        }
+      ],
+      "indexes": [
+        {
+          "name": "ix_specimens_family",
+          "primary": false,
+          "unique": false,
+          "type": "BTREE",
+          "cardinality": 12,
+          "columns": [
+            "family"
+          ]
+        },
+        {
+          "name": "PRIMARY",
+          "primary": true,
+          "unique": true,
+          "type": "BTREE",
+          "cardinality": 12,
+          "columns": [
+            "id"
+          ]
+        },
+        {
+          "name": "seed_key",
+          "primary": false,
+          "unique": true,
+          "type": "BTREE",
+          "cardinality": 12,
+          "columns": [
+            "seed_key"
+          ]
+        }
+      ],
+      "relations": [],
+      "checks": []
+    }
+  ],
+  "log": [
+    {
+      "step": "schema",
+      "label": "Server version",
+      "sql": "SELECT VERSION() AS version",
+      "rows": 1,
+      "ms": 13.5
+    },
+    {
+      "step": "schema",
+      "label": "Tables",
+      "sql": "SELECT TABLE_NAME AS name, TABLE_TYPE AS kind, ENGINE AS engine, TABLE_ROWS AS estimated_rows,\n       DATA_LENGTH AS data_bytes, INDEX_LENGTH AS index_bytes, AVG_ROW_LENGTH AS avg_row_bytes,\n       AUTO_INCREMENT AS auto_increment, TABLE_COMMENT AS comment, CREATE_TIME AS created_at\n  FROM information_schema.TABLES\n WHERE TABLE_SCHEMA = DATABASE()\n ORDER BY name",
+      "rows": 1,
+      "ms": 16.7
+    },
+    {
+      "step": "schema",
+      "label": "Columns",
+      "sql": "SELECT TABLE_NAME AS table_name, ORDINAL_POSITION AS position, COLUMN_NAME AS name,\n       COLUMN_TYPE AS type, DATA_TYPE AS data_type, IS_NULLABLE AS nullable,\n       COLUMN_DEFAULT AS default_value, EXTRA AS extra, COLUMN_COMMENT AS comment\n  FROM information_schema.COLUMNS\n WHERE TABLE_SCHEMA = DATABASE()\n ORDER BY table_name, position",
+      "rows": 14,
+      "ms": 18.2
+    },
+    {
+      "step": "schema",
+      "label": "Indexes and keys",
+      "sql": "SELECT TABLE_NAME AS table_name, INDEX_NAME AS name, NON_UNIQUE AS non_unique,\n       SEQ_IN_INDEX AS seq, COLUMN_NAME AS column_name, INDEX_TYPE AS type, CARDINALITY AS cardinality\n  FROM information_schema.STATISTICS\n WHERE TABLE_SCHEMA = DATABASE()\n ORDER BY table_name, name, seq",
+      "rows": 3,
+      "ms": 18
+    },
+    {
+      "step": "schema",
+      "label": "Foreign keys",
+      "sql": "SELECT TABLE_NAME AS table_name, CONSTRAINT_NAME AS name, COLUMN_NAME AS column_name,\n       REFERENCED_TABLE_NAME AS ref_table, REFERENCED_COLUMN_NAME AS ref_column\n  FROM information_schema.KEY_COLUMN_USAGE\n WHERE TABLE_SCHEMA = DATABASE() AND REFERENCED_TABLE_NAME IS NOT NULL\n ORDER BY table_name, name, ORDINAL_POSITION",
+      "rows": 0,
+      "ms": 14.9
+    },
+    {
+      "step": "schema",
+      "label": "Check constraints",
+      "sql": "SELECT tc.TABLE_NAME AS table_name, cc.CONSTRAINT_NAME AS name, cc.CHECK_CLAUSE AS predicate\n  FROM information_schema.CHECK_CONSTRAINTS cc\n  JOIN information_schema.TABLE_CONSTRAINTS tc\n    ON tc.CONSTRAINT_SCHEMA = cc.CONSTRAINT_SCHEMA AND tc.CONSTRAINT_NAME = cc.CONSTRAINT_NAME\n WHERE cc.CONSTRAINT_SCHEMA = DATABASE()\n ORDER BY table_name, name",
+      "rows": 0,
+      "ms": 16.1
+    },
+    {
+      "step": "stats",
+      "label": "Column statistics, specimens",
+      "sql": "SELECT COUNT(*) AS `rows`,\n       COUNT(DISTINCT `id`) AS `id.distinct`,\n       SUM(`id` IS NULL) AS `id.nulls`,\n       MIN(`id`) AS `id.min`,\n       MAX(`id`) AS `id.max`,\n       COUNT(DISTINCT `latin_name`) AS `latin_name.distinct`,\n       SUM(`latin_name` IS NULL) AS `latin_name.nulls`,\n       COUNT(DISTINCT `common_name`) AS `common_name.distinct`,\n       SUM(`common_name` IS NULL) AS `common_name.nulls`,\n       COUNT(DISTINCT `family`) AS `family.distinct`,\n       SUM(`family` IS NULL) AS `family.nulls`,\n       COUNT(DISTINCT `locality`) AS `locality.distinct`,\n       SUM(`locality` IS NULL) AS `locality.nulls`,\n       COUNT(DISTINCT `collected_on`) AS `collected_on.distinct`,\n       SUM(`collected_on` IS NULL) AS `collected_on.nulls`,\n       MIN(`collected_on`) AS `collected_on.min`,\n       MAX(`collected_on`) AS `collected_on.max`,\n       COUNT(DISTINCT `collector`) AS `collector.distinct`,\n       SUM(`collector` IS NULL) AS `collector.nulls`,\n       COUNT(DISTINCT `object_key`) AS `object_key.distinct`,\n       SUM(`object_key` IS NULL) AS `object_key.nulls`,\n       COUNT(DISTINCT `content_type`) AS `content_type.distinct`,\n       SUM(`content_type` IS NULL) AS `content_type.nulls`,\n       COUNT(DISTINCT `byte_size`) AS `byte_size.distinct`,\n       SUM(`byte_size` IS NULL) AS `byte_size.nulls`,\n       MIN(`byte_size`) AS `byte_size.min`,\n       MAX(`byte_size`) AS `byte_size.max`,\n       COUNT(DISTINCT `drawing`) AS `drawing.distinct`,\n       SUM(`drawing` IS NULL) AS `drawing.nulls`,\n       COUNT(DISTINCT `seed_key`) AS `seed_key.distinct`,\n       SUM(`seed_key` IS NULL) AS `seed_key.nulls`,\n       SUM(`created_sql` IS NULL) AS `created_sql.nulls`,\n       COUNT(DISTINCT `created_at`) AS `created_at.distinct`,\n       SUM(`created_at` IS NULL) AS `created_at.nulls`,\n       MIN(`created_at`) AS `created_at.min`,\n       MAX(`created_at`) AS `created_at.max`\n  FROM `specimens`",
+      "rows": 1,
+      "ms": 24.2
+    },
+    {
+      "step": "stats",
+      "label": "Common values, specimens.locality",
+      "sql": "SELECT `locality` AS value, COUNT(*) AS n\n  FROM `specimens`\n GROUP BY `locality`\n ORDER BY n DESC, value\n LIMIT 6",
+      "rows": 5,
+      "ms": 16.6
+    },
+    {
+      "step": "stats",
+      "label": "Common values, specimens.collector",
+      "sql": "SELECT `collector` AS value, COUNT(*) AS n\n  FROM `specimens`\n GROUP BY `collector`\n ORDER BY n DESC, value\n LIMIT 6",
+      "rows": 4,
+      "ms": 15.5
+    },
+    {
+      "step": "stats",
+      "label": "Common values, specimens.content_type",
+      "sql": "SELECT `content_type` AS value, COUNT(*) AS n\n  FROM `specimens`\n GROUP BY `content_type`\n ORDER BY n DESC, value\n LIMIT 6",
+      "rows": 1,
+      "ms": 15.5
+    }
+  ],
+  "totals": {
+    "queries": 10,
+    "ms": 169.2
+  }
+}

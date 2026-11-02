@@ -1,0 +1,23 @@
+{
+  "name": "demo-azimutt",
+  "version": "1.0.0",
+  "description": "The Map Room: the Azimutt add-on charts a MySQL database on Clever Cloud, with a cartographer's companion page.",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "main": "server.js",
+  "engines": {
+    "node": "24"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test test/",
+    "survey": "node scripts/survey.js",
+    "resurvey": "node scripts/resurvey.js"
+  },
+  "devDependencies": {
+    "@azimutt/aml": "0.1.10",
+    "mysql2": "3.24.6"
+  }
+}

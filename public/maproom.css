@@ -1,0 +1,266 @@
+/* The Map Room: a dark chart room (the Clever navy) with nautical charts laid on the table.
+   Chart conventions: white deep water, blue shallows, buff land, green drying fringe,
+   magenta for lights, compass rose and cautions. Type: Old Standard TT for the chart,
+   Barlow Condensed for annotations, JetBrains Mono for SQL. */
+
+:root {
+  --paper: #f3f5ef;
+  --paper-2: #e6ebe2;
+  --shoal-1: #c4dbe5;
+  --shoal-2: #deebef;
+  --land: #ead494;
+  --land-ink: #b0913f;
+  --drying: #c0d39f;
+  --ink: #1c2333;
+  --ink-2: #4b566b;
+  --contour: #6f9fbd;
+  --rule: #b9cfdc;
+  --magenta: #b0197a;
+  --magenta-soft: rgba(176, 25, 122, 0.12);
+  --f-chart: "Old Standard TT", "Iowan Old Style", Georgia, serif;
+  --f-label: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
+  --neatline: inset 0 0 0 1px rgba(28, 35, 51, 0.55), inset 0 0 0 5px var(--paper), inset 0 0 0 6px rgba(28, 35, 51, 0.22);
+  --lift: 0 24px 60px rgba(5, 7, 20, 0.5), 0 2px 6px rgba(5, 7, 20, 0.3);
+}
+
+.wrap { width: 100%; max-width: 1240px; margin-inline: auto; padding-inline: var(--cc-gutter); }
+.room { display: block; }
+.room code { font-family: var(--cc-mono); font-size: 0.86em; }
+
+/* ---------- Intro, on the dark table ---------- */
+.intro { padding-top: clamp(36px, 6vw, 72px); padding-bottom: clamp(22px, 3vw, 34px); display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 18px clamp(24px, 4vw, 56px); align-items: end; }
+.intro__title { grid-column: 1 / -1; font-family: var(--f-chart); font-style: italic; font-weight: 400; font-size: clamp(48px, 8.4vw, 112px); line-height: 0.95; letter-spacing: -0.015em; color: var(--paper); }
+.intro__lead { font-family: var(--f-chart); font-size: clamp(17px, 1.55vw, 20px); line-height: 1.62; color: var(--cc-text-2); max-width: 60ch; }
+.intro__lead code { color: var(--paper); }
+.intro__actions { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; padding-bottom: 6px; }
+.intro__btn {
+  display: inline-flex; align-items: center; min-height: 48px; padding: 0 26px;
+  font-family: var(--f-chart); font-style: italic; font-size: 19px; color: var(--ink);
+  background: var(--paper); box-shadow: var(--neatline), 0 10px 26px rgba(5, 7, 20, 0.45);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.intro__btn:hover { transform: translateY(-1px); box-shadow: var(--neatline), 0 14px 32px rgba(176, 25, 122, 0.35); }
+.intro__status { display: flex; align-items: center; gap: 10px; font-family: var(--f-label); font-size: 16px; letter-spacing: 0.02em; color: var(--cc-muted); }
+.intro__lamp { width: 10px; height: 10px; border-radius: 50%; background: var(--cc-muted); flex: none; }
+.intro__status[data-state="ok"] { color: var(--cc-text-2); }
+.intro__status[data-state="ok"] .intro__lamp { background: var(--cc-green); box-shadow: 0 0 0 4px rgba(17, 190, 169, 0.18), 0 0 14px rgba(17, 190, 169, 0.7); }
+.intro__status[data-state="degraded"] .intro__lamp { background: var(--cc-gold); box-shadow: 0 0 12px rgba(252, 185, 0, 0.6); }
+
+/* ---------- The chart sheet ---------- */
+.chart-table { padding-inline: var(--cc-gutter); position: relative; }
+.chart-table::before { /* the lamp over the chart table */
+  content: ""; position: absolute; inset: -60px 0 auto; height: 900px; z-index: -1; pointer-events: none;
+  background: radial-gradient(640px 420px at 50% 42%, rgba(111, 159, 189, 0.2), transparent 70%);
+}
+.sheet { max-width: 1240px; margin-inline: auto; background: var(--paper); box-shadow: var(--lift); line-height: 0; }
+.chart { width: 100%; height: auto; }
+.chart--tall { display: none; }
+.sheet__hint { margin-top: 14px; font-family: var(--f-chart); font-style: italic; font-size: 16px; color: var(--cc-muted); text-align: center; line-height: 1.5; }
+
+.chart .sea { fill: var(--paper); }
+.chart .border { fill: none; stroke: var(--ink); stroke-width: 1.2; }
+.chart .border__tick { fill: var(--ink); }
+.chart .shoal--2 { fill: var(--shoal-2); }
+.chart .shoal--1 { fill: var(--shoal-1); }
+.chart .contour { fill: none; stroke: var(--contour); stroke-width: 0.8; }
+.chart .drying { fill: var(--drying); }
+.chart .land { fill: var(--land); cursor: pointer; }
+.chart .relief { fill: none; stroke: var(--land-ink); stroke-width: 0.7; opacity: 0.55; pointer-events: none; }
+.chart .relief--top { opacity: 0.35; }
+.chart .hachure { stroke: var(--land-ink); stroke-width: 0.8; }
+.chart .coast { fill: none; stroke: var(--ink); stroke-width: 1.7; stroke-linejoin: round; pointer-events: none; }
+.chart .coast--nullable { stroke-dasharray: 6 4.5; }
+
+.sym { fill: var(--paper); stroke: var(--ink); stroke-width: 1.4; }
+.sym--fill { fill: var(--ink); }
+.sym--dot { fill: var(--ink); }
+.light__flare { fill: var(--magenta); opacity: 0.82; }
+.light__star { fill: var(--ink); }
+.sounding { font-family: var(--f-chart); font-style: italic; font-size: 15px; fill: var(--ink-2); text-anchor: middle; }
+
+.chart .place { cursor: pointer; outline: none; }
+.chart .place__hit { fill: transparent; stroke: none; }
+.chart .place__name { font-family: var(--f-chart); font-size: 18px; fill: var(--ink); }
+.chart .place__type { font-family: var(--f-label); font-size: 13.5px; letter-spacing: 0.02em; fill: var(--ink-2); }
+.chart .place__light { font-family: var(--f-label); font-size: 13px; font-weight: 600; letter-spacing: 0.04em; fill: var(--magenta); }
+.chart .place:hover .place__name, .chart .place:focus-visible .place__name { fill: var(--magenta); }
+.chart .place:focus-visible .place__hit { stroke: var(--magenta); stroke-width: 1.2; stroke-dasharray: 3 3; }
+.chart .place.is-selected .place__name { fill: var(--magenta); font-style: italic; }
+.chart .place.is-selected .sym { stroke: var(--magenta); stroke-width: 2.2; }
+.chart .place.is-selected .sym--fill, .chart .place.is-selected .sym--dot { fill: var(--magenta); }
+
+.chart .island-name { cursor: pointer; outline: none; }
+.chart .island-name__title { font-family: var(--f-chart); font-size: 36px; letter-spacing: 0.34em; fill: var(--ink); text-anchor: middle; }
+.chart .island-name__sub { font-family: var(--f-chart); font-style: italic; font-size: 16px; fill: var(--ink-2); text-anchor: middle; }
+.chart .island-name:focus-visible .island-name__title, .chart .island-name.is-selected .island-name__title { fill: var(--magenta); }
+.region { font-family: var(--f-chart); font-style: italic; font-size: 15.5px; letter-spacing: 0.1em; fill: #8a6f2c; text-anchor: middle; pointer-events: none; }
+.region__n { font-family: var(--f-label); font-style: normal; font-size: 12px; letter-spacing: 0; fill: #8a6f2c; }
+
+.track { fill: none; stroke: var(--magenta); stroke-width: 1.7; stroke-dasharray: 8 5; }
+.track__head { fill: var(--magenta); }
+.chart .note { outline: none; }
+.chart .note--cellar { cursor: pointer; }
+.chart .note__title { font-family: var(--f-label); font-size: 15px; font-weight: 600; letter-spacing: 0.06em; fill: var(--magenta); }
+.chart .note__text { font-family: var(--f-chart); font-style: italic; font-size: 15px; fill: var(--ink); }
+.chart .note--cellar:hover .note__title, .chart .note--cellar:focus-visible .note__title, .chart .note--cellar.is-selected .note__title { text-decoration: underline; }
+
+.chart .scale__b { fill: var(--ink); }
+.chart .scale__w { fill: var(--paper); }
+.chart .scale__frame { fill: none; stroke: var(--ink); stroke-width: 1; }
+.chart .scale__label { font-family: var(--f-label); font-size: 13px; fill: var(--ink); }
+.chart .scale__caption { font-family: var(--f-label); font-size: 13px; letter-spacing: 0.02em; fill: var(--ink-2); }
+
+.chart .cartouche__box { fill: var(--paper); stroke: var(--ink); stroke-width: 1.4; }
+.chart .cartouche__inner { fill: none; stroke: var(--ink); stroke-width: 0.6; }
+.chart .cartouche__kicker { font-family: var(--f-label); font-size: 14px; letter-spacing: 0.18em; fill: var(--ink-2); text-anchor: middle; }
+.chart .cartouche__title { font-family: var(--f-chart); font-size: 42px; fill: var(--ink); text-anchor: middle; letter-spacing: 0.02em; }
+.chart .cartouche__sub { font-family: var(--f-chart); font-style: italic; font-size: 18px; fill: var(--ink); text-anchor: middle; }
+.chart .cartouche__meta { font-family: var(--f-label); font-size: 13.5px; fill: var(--ink-2); text-anchor: middle; }
+.chart .cartouche__meta--caps { letter-spacing: 0.2em; fill: var(--magenta); }
+
+.chart .compass__ring { fill: none; stroke: var(--magenta); stroke-width: 1; }
+.chart .compass__tick { fill: none; stroke: var(--magenta); stroke-width: 0.9; }
+.chart .compass__deg { font-family: var(--f-label); font-size: 10.5px; fill: var(--magenta); text-anchor: middle; }
+.chart .compass__star { fill: var(--paper); stroke: var(--magenta); stroke-width: 1; }
+.chart .compass__north { fill: var(--magenta); }
+.chart .compass__hub { fill: var(--magenta); }
+.chart .compass__needle { transform-box: view-box; transition: transform 1.1s cubic-bezier(0.25, 1.35, 0.45, 1); }
+.chart .compass__azimuth { font-family: var(--f-label); font-size: 14px; letter-spacing: 0.08em; fill: var(--magenta); text-anchor: middle; }
+
+/* Bigger lettering on the portrait chart, which is drawn for phones. */
+.chart--tall .place__name { font-size: 23px; }
+.chart--tall .place__type { font-size: 17px; }
+.chart--tall .place__light { font-size: 16px; }
+.chart--tall .sounding { font-size: 19px; }
+.chart--tall .island-name__title { font-size: 21px; letter-spacing: 0.08em; }
+.chart--tall .island-name__sub { font-size: 19px; }
+.chart--tall .region { font-size: 17px; letter-spacing: 0.02em; }
+.chart--tall .note__title { font-size: 18px; }
+.chart--tall .note__text { font-size: 17.5px; }
+.chart--tall .scale__label, .chart--tall .scale__caption { font-size: 15px; }
+.chart--tall .cartouche__title { font-size: 44px; }
+.chart--tall .cartouche__sub { font-size: 20px; }
+.chart--tall .cartouche__meta { font-size: 16px; }
+.chart--tall .cartouche__kicker { font-size: 16px; }
+.chart--tall .compass__deg { font-size: 11px; }
+.chart--tall .compass__azimuth { font-size: 16px; }
+
+/* ---------- Paper sheets ---------- */
+.duo { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: clamp(16px, 2.4vw, 28px); margin-top: clamp(28px, 4vw, 48px); align-items: start; }
+.duo--even { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.room > .wrap:not(.intro):not(.duo) { margin-top: clamp(28px, 4vw, 48px); }
+.paper { position: relative; background: var(--paper); color: var(--ink); padding: clamp(22px, 3vw, 36px); box-shadow: var(--neatline), var(--lift); font-family: var(--f-chart); font-size: 17px; line-height: 1.6; }
+.paper a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--magenta); text-underline-offset: 3px; }
+.paper a:hover { color: var(--magenta); }
+.paper a:focus-visible, .paper button:focus-visible, .paper summary:focus-visible { outline: 2px solid var(--magenta); outline-offset: 2px; }
+.paper__title { font-family: var(--f-chart); font-style: italic; font-weight: 400; font-size: clamp(26px, 2.6vw, 32px); line-height: 1.15; }
+.paper__intro { margin-top: 8px; color: var(--ink-2); max-width: 70ch; }
+
+/* Pilot book */
+.pilot { min-height: 100%; }
+.pilot__kicker { font-family: var(--f-label); font-size: 16px; font-weight: 500; letter-spacing: 0.06em; color: var(--magenta); }
+.pilot__title { margin-top: 2px; font-family: var(--f-chart); font-weight: 400; font-size: clamp(34px, 4vw, 50px); line-height: 1.05; overflow-wrap: anywhere; }
+.pilot__story { margin-top: 12px; font-size: 18.5px; max-width: 58ch; }
+.pilot__facts { margin-top: 18px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); border-top: 1px solid var(--rule); }
+.pilot__facts > div { padding: 10px 0 9px; border-bottom: 1px solid var(--rule); padding-right: 14px; }
+.pilot__facts dt { font-family: var(--f-label); font-size: 14px; letter-spacing: 0.04em; color: var(--ink-2); }
+.pilot__facts dd { font-size: 17px; overflow-wrap: anywhere; }
+.pilot__values { list-style: none; margin-top: 18px; display: grid; gap: 7px; }
+.pilot__values li { display: grid; grid-template-columns: minmax(0, 11rem) minmax(0, 1fr) 2.2rem; gap: 10px; align-items: center; font-size: 16px; }
+.pilot__values .bar { height: 9px; background: var(--shoal-1); position: relative; }
+.pilot__values .bar span { position: absolute; inset: 0 auto 0 0; background: var(--contour); transform-origin: left; animation: bar-in 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.pilot__values .n { font-family: var(--f-label); font-size: 15px; text-align: right; color: var(--ink-2); }
+@keyframes bar-in { from { transform: scaleX(0); } }
+.pilot__note { margin-top: 18px; padding-left: 14px; border-left: 3px solid var(--magenta); font-style: italic; }
+.pilot__note span { display: block; font-family: var(--f-label); font-style: normal; font-size: 14px; letter-spacing: 0.04em; color: var(--magenta); }
+.pilot__sqllabel { margin-top: 20px; font-family: var(--f-label); font-size: 14px; letter-spacing: 0.04em; color: var(--ink-2); }
+.pilot__sql, .log pre {
+  margin: 6px 0 0; padding: 12px 14px; background: var(--paper-2); border-left: 3px solid var(--contour);
+  font-family: var(--cc-mono); font-size: 12.5px; line-height: 1.6; color: var(--ink); white-space: pre; overflow-x: auto;
+}
+.pilot__back { display: none; margin-top: 16px; font-family: var(--f-label); font-size: 16px; }
+
+/* Chart No. 1 */
+.legend__list { list-style: none; margin-top: 14px; display: grid; gap: 0; }
+.legend__list li { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--rule); font-size: 15.5px; line-height: 1.45; }
+.legend__list li:last-child { border-bottom: none; }
+.legend__list strong { display: block; font-weight: 700; font-size: 16px; }
+.legend__sym svg { width: 52px; height: 33px; }
+.legend__sym .lg-shoal { fill: var(--shoal-1); }
+.legend__sym .lg-land { fill: var(--land); stroke: var(--ink); stroke-width: 1.2; }
+.legend__sym .lg-coast { fill: none; stroke: var(--ink); stroke-width: 1.6; }
+.legend__sym .lg-coast--dash { stroke-dasharray: 5 4; }
+.legend__sym .region { font-size: 14px; }
+
+/* Ship's log: a ruled log book with a red margin */
+.log__head { max-width: 80ch; }
+.log__list { list-style: none; margin-top: 18px; border-top: 1px solid var(--rule); background-image: linear-gradient(90deg, transparent 86px, rgba(176, 25, 122, 0.35) 86px, rgba(176, 25, 122, 0.35) 87px, transparent 87px); }
+.log__entry { border-bottom: 1px solid var(--rule); }
+.log__entry summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 86px minmax(0, 1fr) auto 76px; gap: 0 16px; align-items: baseline; padding: 10px 6px 9px 0; }
+.log__entry summary::-webkit-details-marker { display: none; }
+.log__entry summary:hover .log__what { color: var(--magenta); }
+.log__time { font-family: var(--f-label); font-size: 15px; color: var(--magenta); padding-right: 10px; }
+.log__what { font-size: 17px; padding-left: 4px; }
+.log__what small { display: inline-block; margin-left: 10px; font-family: var(--f-label); font-size: 14px; color: var(--ink-2); letter-spacing: 0.02em; }
+.log__rows, .log__ms { font-family: var(--f-label); font-size: 15px; color: var(--ink-2); text-align: right; white-space: nowrap; }
+.log__entry details[open] summary .log__what { font-style: italic; }
+.log__entry pre { margin: 0 0 12px 102px; }
+
+/* The crossing */
+.route__ports { list-style: none; margin-top: 18px; position: relative; display: grid; gap: 18px; }
+.route__ports::before { content: ""; position: absolute; left: 9px; top: 12px; bottom: 12px; border-left: 2px dashed var(--magenta); }
+.route__ports li { position: relative; padding-left: 36px; }
+.route__ports li::before { content: ""; position: absolute; left: 1px; top: 6px; width: 14px; height: 14px; border-radius: 50%; background: var(--paper); border: 2px solid var(--magenta); box-shadow: 0 0 0 3px var(--paper); }
+.route__ports strong { display: block; font-size: 18px; }
+.route__signin { margin-top: 18px; font-style: italic; }
+.route__live { margin-top: 10px; font-family: var(--f-label); font-size: 15px; color: var(--ink-2); letter-spacing: 0.02em; }
+
+/* Orders */
+.orders__list { margin-top: 16px; padding-left: 0; list-style: none; counter-reset: order; display: grid; gap: 12px; }
+.orders__list li { counter-increment: order; position: relative; padding-left: 44px; }
+.orders__list li::before { content: counter(order); position: absolute; left: 0; top: 1px; width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid var(--magenta); color: var(--magenta); font-style: italic; font-size: 17px; line-height: 27px; text-align: center; }
+.orders__plan { margin-top: 18px; padding: 10px 14px; background: var(--magenta-soft); font-family: var(--f-label); font-size: 16px; letter-spacing: 0.01em; }
+
+/* Chart case */
+.case__files { list-style: none; margin-top: 16px; display: grid; gap: 0; border-top: 1px solid var(--rule); }
+.case__files li { display: grid; grid-template-columns: 11rem minmax(0, 1fr) auto; gap: 8px 18px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--rule); }
+.case__files a { font-family: var(--cc-mono); font-size: 14px; }
+.case__copy { font-family: var(--f-label); font-size: 15px; letter-spacing: 0.04em; color: var(--magenta); background: transparent; border: 1.5px solid var(--magenta); padding: 6px 14px; cursor: pointer; }
+.case__copy:hover { background: var(--magenta-soft); }
+
+/* Frame pieces placed in the room */
+.platform { margin-top: clamp(28px, 4vw, 48px); }
+.academy { display: flex; align-items: center; gap: 16px; color: var(--cc-text-2); }
+.academy__badge { width: 104px; height: 104px; flex: none; filter: drop-shadow(0 10px 20px rgba(165, 16, 80, 0.35)); }
+.academy span { font-size: 14px; color: var(--cc-muted); }
+.academy strong { display: block; font-size: 16px; color: var(--cc-text); margin-bottom: 4px; }
+.academy:hover strong { color: var(--cc-orange); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 980px) {
+  .duo, .duo--even { grid-template-columns: minmax(0, 1fr); }
+  .intro { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 860px) { /* below this width the landscape chart's lettering gets too small: draw the portrait chart */
+  .chart--wide { display: none; }
+  .chart--tall { display: block; }
+  .sheet { max-width: 600px; }
+}
+@media (max-width: 720px) {
+  .chart-table { padding-inline: 0; }
+  .sheet__hint { font-size: 15px; }
+  .pilot__back { display: inline-block; }
+  .log__list { background-image: none; }
+  .log__entry summary { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "what what" "time meta"; gap: 2px 12px; }
+  .log__what { grid-area: what; padding-left: 0; }
+  .log__time { grid-area: time; }
+  .log__rows { display: none; }
+  .log__ms { grid-area: meta; }
+  .log__entry pre { margin-left: 0; }
+  .case__files li { grid-template-columns: minmax(0, 1fr) auto; }
+  .case__files li span { grid-column: 1 / -1; grid-row: 2; }
+  .pilot__values li { grid-template-columns: minmax(0, 8rem) minmax(0, 1fr) 2rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .chart .compass__needle { transition: none; }
+}
