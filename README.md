@@ -10,6 +10,8 @@
 
 **Run it yourself.** The hosted demo was taken down after the presales review (November 2026), and so was the Herbarium's MySQL it explored. The steps in [Deploy on Clever Cloud](#deploy-on-clever-cloud) recreate the map room and the Azimutt add-on from scratch in about 10 minutes, sign-in included. For a database to explore, [deploy demo-python-mysql-cellar](https://github.com/Vitiosum/demo-python-mysql-cellar#deploy-on-clever-cloud) first (about 10 more minutes), or point Azimutt at any MySQL or PostgreSQL database.
 
+**Get certified.** This demo runs on Clever Cloud. To deploy your own apps the same way, get certified at the [Clever Cloud Academy](https://academy.clever.cloud/).
+
 ---
 
 ## What each piece does
